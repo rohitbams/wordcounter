@@ -48,26 +48,26 @@ public class WordCounter {
                 //String longest = strings.stream().max(Comparator.comparingInt(String::length)).get();
                 //int max = longest.length();
 
-                if (words.length < 3) {
+//                if (words.length < 3) {
                     if (count == 0) {
-                        System.out.println("The word " + words[i - 1] + " does not appear in your file.");
+                        System.out.println("The word '" + words[i - 1] + "' appears " + count + " times.");
                     } else if (count == 1) {
-                        System.out.println("The word " + words[i - 1] + " appears " + +count + " time.");
+                        System.out.println("The word '" + words[i - 1] + "' appears " + +count + " time.");
                     } else {
-                        System.out.println("The word " + words[i - 1] + " appears " + +count + " times." + totalCount);
+                        System.out.println("The word '" + words[i - 1] + "' appears " + +count + " times.");
                         //Arrays.stream(words).forEach(System.out::println);
-                    }
-                } else {
-                    String nline = "\n";
+                    //}
+//                } else {
+//                    String nline = "\n";
 
                     //System.out.println(countArray);
-                    String.join(nline, words);
-                    System.out.printf("|---------------------------------|%n");
-                    System.out.printf("|     Word      |      Count      |%n");
-                    System.out.printf("|---------------------------------|%n");
-                    Arrays.stream(words).forEach(System.out::println);
-                    System.out.println(words);
-                    System.out.println("total " + totalCount);
+//                    String.join(nline, words);
+//                    System.out.printf("|---------------------------------|%n");
+//                    System.out.printf("|     Word      |      Count      |%n");
+//                    System.out.printf("|---------------------------------|%n");
+//                    Arrays.stream(words).forEach(System.out::println);
+//                    System.out.println(words);
+//                    System.out.println("total " + totalCount);
 
 
 
