@@ -1,60 +1,81 @@
-import java.io.*;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class WordCounter {
-    /// Users/rohitbamane/repos/java/CS5001-p1-wordcounter/src/pride-and-prejudice.txt
-    /// Users/rohitbamane/repos/java/CS5001-p1-wordcounter/src/a-tale-of-two-citiest.txt
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         try {
             if (args.length < 2) {
-                System.out.println("Usage: java WordCounter <filename> <searchTerms>");
+                System.out.println("Usage: java WordCounter <fileName> <searchTerm>");
                 return;
             }
+
             String fileName = args[0];
-            if (args[0] == null){
-                System.out.println("File not found: " + fileName);
-                return;
-            }
-
-            List<String> line = new ArrayList<>();
             String[] words = new String[args.length - 1];
+            String line = "";
+            ArrayList<String> lines = new ArrayList<>();
+            int totalCount = 0;
 
-            BufferedReader br =  new BufferedReader(new FileReader(fileName));
-            try {
-                int count = 0;
-                Pattern pattern;
-                Matcher matcher;
-
-                for (int i = 1; i < args.length; i++) {
-                    words[i - 1] = args[i];
-                    count = 0;
-
-                    while ((line = br.readLine()) != null) {
-                        pattern = Pattern.compile("\\b"+ words[i - 1] +"\\b");
-                        matcher = pattern.matcher(line);
-                        while (matcher.find()) {
-                            count++;
-                        }
-                    }
-
-                    if (count == 1) {
-                        System.out.println("The word '" + words[i - 1] + "' appears " + count + " time.");
-                    } else if (count == 0){
-                        System.out.println("The word '" + words[i-1] + "' does not appear in the text file");
-                    } else System.out.println("The word '" + words[i - 1] + "' appears " + count + " times.");
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                    br.close();
+            File file = new File(fileName);
+            if (!file.exists()) {
+                System.out.println("File not found: " + fileName);
             }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            BufferedReader br = new BufferedReader(new FileReader(fileName));
+            while ((line = br.readLine()) != null) {
+                lines.add(line);
+            }
+            int count = 0;
+
+            for (int i = 1; i < args.length; i++) {
+                words[i - 1] = args[i];
+                totalCount = count;
+                count = 0;// reset the counter
+                for (String lineFromList : lines) {
+                    Pattern patter = Pattern.compile("\\b" + words[i - 1] + "\\b");
+                    Matcher matcher = patter.matcher(lineFromList);
+
+                    while (matcher.find()) {
+                        count++;
+                    }
+                }
+                //List<String> strings = Arrays.asList(words);
+                //String longest = strings.stream().max(Comparator.comparingInt(String::length)).get();
+                //int max = longest.length();
+
+                if (words.length < 3) {
+                    if (count == 0) {
+                        System.out.println("The word " + words[i - 1] + " does not appear in your file.");
+                    } else if (count == 1) {
+                        System.out.println("The word " + words[i - 1] + " appears " + +count + " time.");
+                    } else {
+                        System.out.println("The word " + words[i - 1] + " appears " + +count + " times." + totalCount);
+                        //Arrays.stream(words).forEach(System.out::println);
+                    }
+                } else {
+                    String nline = "\n";
+
+                    //System.out.println(countArray);
+                    String.join(nline, words);
+                    System.out.printf("|---------------------------------|%n");
+                    System.out.printf("|     Word      |      Count      |%n");
+                    System.out.printf("|---------------------------------|%n");
+                    Arrays.stream(words).forEach(System.out::println);
+                    System.out.println(words);
+                    System.out.println("total " + totalCount);
+
+
+
+                    }
+                }
+            } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 }
