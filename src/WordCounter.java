@@ -3,7 +3,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +21,7 @@ public class WordCounter {
             String line = "";
             ArrayList<String> lines = new ArrayList<>();
             int totalCount = 0;
-            System.out.println(Arrays.toString(words));
+            //System.out.println(Arrays.toString(words));
 
             File file = new File(fileName);
             if (!file.exists()) {
@@ -39,7 +38,7 @@ public class WordCounter {
                 words[i - 1] = args[i];
                 // System.out.println("Assigned word: " + words[i - 1]);
 
-                count = 0;// reset the counter
+                count = 0; // reset the counter
 
                 /* this for-each loop
                  *
@@ -71,11 +70,15 @@ public class WordCounter {
                     } else if (count == 1) {
                         System.out.println("The word '" + words[i - 1] + "' appears " + +count + " time.");
                     } else {
-                        System.out.println("The word '" + words[i - 1] + "' appears " + +count + " times." + totalCount);
+                        System.out.println("The word '" + words[i - 1] + "' appears " + +count + " times.");
                     }
                 } else {
-                    System.out.printf("| %-15s | %-10d |%s", "Word", "Count");
+                    //System.out.printf("--------------------------------%n");
+                    //System.out.printf("| %-15s | %-10s |%n", "Word", "Count");
+                    //System.out.printf("--------------------------------%n");
                     System.out.printf("| %-15s | %-10d |%n", words[i - 1], count);
+                    //System.out.printf("--------------------------------%n");
+                    //System.out.printf("| %-15s | %-10d |%n", "Total", totalCount);
 
 
                 }
