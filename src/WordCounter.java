@@ -22,7 +22,7 @@ public class WordCounter {
     public static void main(String[] args) {
 
         try {
-            // Print usage message if the user eneters fewer than 2 arguments in the command line
+            // Print usage message if the user enters fewer than 2 arguments in the command line
             if (args.length < 2) {
                 System.out.println("Usage: java WordCounter <filename> <searchTerm>");
                 return;
@@ -30,7 +30,7 @@ public class WordCounter {
 
             String fileName = args[0];
             String[] words = new String[args.length - 1];
-            String line = "";
+            String line;
             ArrayList<String> lines = new ArrayList<>();
             int totalCount = 0;
 
@@ -47,9 +47,7 @@ public class WordCounter {
             int longestWordLength = 0;
 
             // Fill words[] array with arguments from args[1] onwards
-            for (int i = 1; i < args.length; i++) {
-                words[i - 1] = args[i];
-            }
+            System.arraycopy(args, 1, words, 0, args.length - 1);
 
             // Find the longest string form the words[] array and assign its value to the int variable longestWordLength
             for (int i = 0; i < words.length; i++) {
@@ -81,23 +79,25 @@ public class WordCounter {
                 }
             } else {
                 int spacesAroundWord = 2;
-                int wordColumnWidthMin = "WORD".length();
-                int headerColumnWidthMin = "WORD".length() + spacesAroundWord;
-                int headerColumnWidthMax = "TOTAL".length() + spacesAroundWord;
-                int spaceAdjuster = 1;
-                int totalColumnLength = "TOTAL".length();
+                int columnWidth = "TOTAL".length();
+                int columnWidthMin = columnWidth + spacesAroundWord;
+                int columnWidthMax = Math.max(longestWordLength, columnWidth);
+                String totalDashes = "-".repeat(longestWordLength < columnWidth ? columnWidthMin : longestWordLength + spacesAroundWord);
+                String countDashes = "-".repeat(columnWidthMin);
 
                 // Print a table if there are multiple items in the words[] array
-                String totalCountString = Integer.toString(totalCount);
-                System.out.println("|" + "-".repeat(longestWordLength < headerColumnWidthMin ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(headerColumnWidthMax) + "|");
-                System.out.printf("| %-" + (longestWordLength < wordColumnWidthMin ? wordColumnWidthMin + spaceAdjuster : longestWordLength) + "s | %s %s %n", "WORD", "COUNT", "|");
-                System.out.println("|" + "-".repeat(longestWordLength < headerColumnWidthMin ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(headerColumnWidthMax) + "|");
+                System.out.println("|" + totalDashes + "|" + "-".repeat(columnWidthMin) + "|"); // Top boundary of table
+                System.out.printf("| %-" + columnWidthMax + "s | %s %s %n", "WORD", "COUNT", "|"); // Headers
+                System.out.println("|" + totalDashes + "|" + "-".repeat(columnWidthMin) + "|"); // Boundary before the words and counts
+
+                // Print word[i] and count[i] incrementally
                 for (int i = 0; i < words.length; i++) {
-                    System.out.printf("| %-" + (longestWordLength < wordColumnWidthMin ? wordColumnWidthMin + spaceAdjuster : longestWordLength) + "s | %" + (totalColumnLength) + "s %s %n", words[i], count[i], "|");
+                    System.out.printf("| %-" + columnWidthMax + "s | %" + columnWidth + "s %s %n", words[i], count[i], "|");
                 }
-                System.out.println("|" + "-".repeat(longestWordLength < headerColumnWidthMin ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(headerColumnWidthMax) + "|");
-                System.out.printf("| %-" + (longestWordLength < totalColumnLength ? totalColumnLength : longestWordLength) + "s | %" + (totalColumnLength) + "s %s %n", "TOTAL", totalCountString, "|");
-                System.out.println("|" + "-".repeat(longestWordLength < totalColumnLength + spaceAdjuster ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(totalCountString.length() > totalColumnLength ? totalCountString.length() + spacesAroundWord : headerColumnWidthMax) + "|");
+
+                System.out.println("|" + totalDashes + "|" + countDashes + "|"); // Boundary after the words and counts
+                System.out.printf("| %-" + (Math.max(longestWordLength, columnWidth)) + "s | %" + columnWidth + "s %s %n", "TOTAL", totalCount, "|"); // Total count of all words
+                System.out.println("|" + totalDashes + "|" + countDashes + "|"); // Bottom boundary
             }
         } catch (IOException e) {
             // Catch exception and print error message if the user doesn't enter or incorrectly enters the file path in the command line argument
