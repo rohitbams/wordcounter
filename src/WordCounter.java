@@ -4,14 +4,27 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.lang.Math;
 
+/**
+ * WordCounter.
+ * WordCounter program is used to count search instances of any number
+ * of words and prints out the total instances of all words
+ * @author rohit  <rb341@st-andrews.ac.uk>
+ * @version 1
+ */
 public class WordCounter {
-
+    /**
+     * main method takes a minimum of two parameters.
+     * @param args
+     *     The absolute or relative path of any .txt file
+     *     The word that is going to be searched
+     */
     public static void main(String[] args) {
+
         try {
+            // Print usage message if the user eneters fewer than 2 arguments in the command line
             if (args.length < 2) {
-                System.out.println("Usage: java WordCounter <fileName> <searchTerm>");
+                System.out.println("Usage: java WordCounter <filename> <searchTerm>");
                 return;
             }
 
@@ -21,48 +34,43 @@ public class WordCounter {
             ArrayList<String> lines = new ArrayList<>();
             int totalCount = 0;
 
-            String RESET = "\u001B[0m";
-            String RED_TEXT = "\u001B[31m";
-            String BLUE_TEXT = "\u001B[32m";
-            String YELLOW_TEXT ="\u001B[33m";
-
+            // New BufferedReader object 'br' to read the text file line by line
             BufferedReader br = new BufferedReader(new FileReader(fileName));
+
+            // Fill lines<> ArrayList with lines read by br from the text file
             while ((line = br.readLine()) != null) {
                 lines.add(line);
             }
-            br.close();
+            br.close(); // Close br to avoid resource leak
+
             int[] count = new int[words.length];
             int longestWordLength = 0;
 
+            // Fill words[] array with arguments from args[1] onwards
             for (int i = 1; i < args.length; i++) {
                 words[i - 1] = args[i];
             }
 
-            /**
-             *  this for loop fills the words[] array with the values from
-             *  the args[] array from index args[1] onwards
-             *  and finds the longest string in the words[] array
-             *  and assigns it's to the int variable longestWordLength
-             */
+            // Find the longest string form the words[] array and assign its value to the int variable longestWordLength
             for (int i = 0; i < words.length; i++) {
                 String word = words[i];
                 longestWordLength = Math.max(longestWordLength, word.length());
 
-                /** this for-each loop
-                 *
-                 */
+                // Iterate each line from the lines<> ArrayList
                 for (String lineFromList : lines) {
-                    Pattern pattern = Pattern.compile("\\b" + word + "\\b", Pattern.CASE_INSENSITIVE);
+                    // Create Pattern and Matcher objects to match the pattern from each iteration of lineFromList within the lines<> ArrayList
+                    Pattern pattern = Pattern.compile("\\b" + word + "\\b");
                     Matcher matcher = pattern.matcher(lineFromList);
-                    /** this while loop matches the word
-                     * and counts its appearances in each line of the text
-                     */
+
+                    // Incrementally add int count[i] for item [i] that matches the pattern
                     while (matcher.find()) {
                         count[i]++;
                     }
                 }
+                // Find the total sum of all items in the count[] array
                 totalCount += count[i];
             }
+            // Print output message is words[] array has only one item (words[0])
             if (args.length == 2) {
                 if (count[0] == 0) {
                     System.out.println("The word '" + words[0] + "' appears " + count[0] + " times.");
@@ -72,18 +80,27 @@ public class WordCounter {
                     System.out.println("The word '" + words[0] + "' appears " + count[0] + " times.");
                 }
             } else {
+                int spacesAroundWord = 2;
+                int wordColumnWidthMin = "WORD".length();
+                int headerColumnWidthMin = "WORD".length() + spacesAroundWord;
+                int headerColumnWidthMax = "TOTAL".length() + spacesAroundWord;
+                int spaceAdjuster = 1;
+                int totalColumnLength = "TOTAL".length();
+
+                // Print a table if there are multiple items in the words[] array
                 String totalCountString = Integer.toString(totalCount);
-                System.out.println(RED_TEXT + "|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
-                System.out.printf("| %-" + (longestWordLength < 4 ? 5 : longestWordLength) + "s | %s %s %n", "WORD", "COUNT", "|");
-                System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|" + RESET);
+                System.out.println("|" + "-".repeat(longestWordLength < headerColumnWidthMin ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(headerColumnWidthMax) + "|");
+                System.out.printf("| %-" + (longestWordLength < wordColumnWidthMin ? wordColumnWidthMin + spaceAdjuster : longestWordLength) + "s | %s %s %n", "WORD", "COUNT", "|");
+                System.out.println("|" + "-".repeat(longestWordLength < headerColumnWidthMin ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(headerColumnWidthMax) + "|");
                 for (int i = 0; i < words.length; i++) {
-                    System.out.printf(BLUE_TEXT + "| %-" + (longestWordLength < 4 ? 5 : longestWordLength) + "s | %" + (5) + "s %s %n", words[i], count[i], "|" + RESET);
+                    System.out.printf("| %-" + (longestWordLength < wordColumnWidthMin ? wordColumnWidthMin + spaceAdjuster : longestWordLength) + "s | %" + (totalColumnLength) + "s %s %n", words[i], count[i], "|");
                 }
-                System.out.println(YELLOW_TEXT + "|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
-                System.out.printf("| %-" + (longestWordLength < 5 ? 5 : longestWordLength) + "s | %" + (5) + "s %s %n", "Total", totalCountString, "|");
-                System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(totalCountString.length() > 5 ? totalCountString.length() + 2 : 7) + "|" + RESET);
+                System.out.println("|" + "-".repeat(longestWordLength < headerColumnWidthMin ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(headerColumnWidthMax) + "|");
+                System.out.printf("| %-" + (longestWordLength < totalColumnLength ? totalColumnLength : longestWordLength) + "s | %" + (totalColumnLength) + "s %s %n", "TOTAL", totalCountString, "|");
+                System.out.println("|" + "-".repeat(longestWordLength < totalColumnLength + spaceAdjuster ? headerColumnWidthMax : longestWordLength + spacesAroundWord) + "|" + "-".repeat(totalCountString.length() > totalColumnLength ? totalCountString.length() + spacesAroundWord : headerColumnWidthMax) + "|");
             }
         } catch (IOException e) {
+            // Catch exception and print error message if the user doesn't enter or incorrectly enters the file path in the command line argument
             System.err.println("File not found: " + args[0]);
         }
     }
