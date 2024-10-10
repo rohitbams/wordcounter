@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.lang.Math;
-import java.io.FileNotFoundException;
 
 public class WordCounter {
 
@@ -62,31 +61,27 @@ public class WordCounter {
                 }
                 totalCount += count[i];
             }
-                if (args.length == 2) {
-                    if (count[0] == 0) {
-                        System.out.println("The word '" + words[0] + "' appears " + count[0] + " times.");
-                    } else if (count[0] == 1) {
-                        System.out.println("The word '" + words[0] + "' appears " + count[0] + " time.");
-                    } else {
-                        System.out.println("The word '" + words[0] + "' appears " + count[0] + " times.");
-                    }
+            if (args.length == 2) {
+                if (count[0] == 0) {
+                    System.out.println("The word '" + words[0] + "' appears " + count[0] + " times.");
+                } else if (count[0] == 1) {
+                    System.out.println("The word '" + words[0] + "' appears " + count[0] + " time.");
                 } else {
-                    System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
-                    System.out.printf("| %-" + (longestWordLength < 4 ? 5 : longestWordLength) + "s | %s %s %n", "WORD", "COUNT", "|");
-                    System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2)  + "|" + "-".repeat(7) + "|");
-                    for(int i = 0; i < words.length; i++) {
-                            System.out.printf("| %-" + (longestWordLength < 4 ? 5 : longestWordLength) + "s | %" + (5) +"s %s %n", words[i], count[i], "|");
-                    }
-                    System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
-                    System.out.printf("| %-" + (longestWordLength < 5 ? 5 : longestWordLength) + "s | %" + (5) + "s %s %n", "Total", totalCount, "|");
-                    System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
+                    System.out.println("The word '" + words[0] + "' appears " + count[0] + " times.");
                 }
-
-            } catch(FileNotFoundException ioe){
-                ioe.printStackTrace();
-            } catch(IOException e){
-                e.printStackTrace();
+            } else {
+                System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
+                System.out.printf("| %-" + (longestWordLength < 4 ? 5 : longestWordLength) + "s | %s %s %n", "WORD", "COUNT", "|");
+                System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
+                for (int i = 0; i < words.length; i++) {
+                    System.out.printf("| %-" + (longestWordLength < 4 ? 5 : longestWordLength) + "s | %" + (5) + "s %s %n", words[i], count[i], "|");
+                }
+                System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
+                System.out.printf("| %-" + (longestWordLength < 5 ? 5 : longestWordLength) + "s | %" + (5) + "s %s %n", "Total", totalCount, "|");
+                System.out.println("|" + "-".repeat(longestWordLength < 6 ? 7 : longestWordLength + 2) + "|" + "-".repeat(7) + "|");
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
-    }
+}
